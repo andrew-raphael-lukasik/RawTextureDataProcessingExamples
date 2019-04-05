@@ -1,2 +1,2 @@
 # RawTextureData Processing Examples
-Processing RawTextureData native array formats was not documented anywhere deep enough. So here is a tutorial by example.
+Documentation gives little helpful information on this topic so I created this repo to document how to create matching data structure + how to read & process it in a IJobParallelFor
