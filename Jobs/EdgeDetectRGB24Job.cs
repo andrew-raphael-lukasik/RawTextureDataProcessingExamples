@@ -19,7 +19,7 @@ public struct EdgeDetectRGB24Job : Unity.Jobs.IJobParallelFor
 		var b = results[ math.min( i+1 , Length ) ];
         results[i] =
 			math.abs((a.R+a.G+a.B)-(b.R+b.G+b.B))<32
-			? new RGB24{ R=255 , G=255 , B=255 }
-			: default(RGB24);
+			? default(RGB24)
+			: new RGB24{ R=255 , G=255 , B=255 };
     }
 }
