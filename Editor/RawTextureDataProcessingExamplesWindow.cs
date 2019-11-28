@@ -29,6 +29,12 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 			BUTTON_EDGES.SetEnabled( _texture!=null );
 			BUTTON_EDGES.text = "Edge Detect";
 		}
+
+		var BUTTON_BLUR = new Button( ()=> Blur( _texture ) );
+		{
+			BUTTON_BLUR.SetEnabled( _texture!=null );
+			BUTTON_BLUR.text = "Blur";
+		}
 		
 		var FIELD = new ObjectField();
 		{
@@ -54,6 +60,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 						PREVIEW.SetEnabled( true );
 						BUTTON_INVERT.SetEnabled( true );
 						BUTTON_EDGES.SetEnabled( true );
+						BUTTON_BLUR.SetEnabled( true );
 					}
 					else
 					{
@@ -62,6 +69,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 						PREVIEW.SetEnabled( false );
 						BUTTON_INVERT.SetEnabled( false );
 						BUTTON_EDGES.SetEnabled( false );
+						BUTTON_BLUR.SetEnabled( false );
 					}
 				}
 			);
@@ -72,6 +80,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		rootVisualElement.Add( PREVIEW );
 		rootVisualElement.Add( BUTTON_INVERT );
 		rootVisualElement.Add( BUTTON_EDGES );
+		rootVisualElement.Add( BUTTON_BLUR );
     }
 
 	static void InvertColors ( Texture2D tex )
@@ -119,6 +128,21 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
 			new EdgeDetectRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
+				.Run( rawdata.Length );
+		}
+		else
+		{
+			throw new System.NotImplementedException($"{tex.format} processing not implemented");
+		}
+		tex.Apply();
+	}
+
+	static void Blur ( Texture2D tex )
+	{
+		if( tex.format==TextureFormat.RGB24 )
+		{
+			var rawdata = tex.GetRawTextureData<RGB24>();
+			new BlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
 				.Run( rawdata.Length );
 		}
 		else
