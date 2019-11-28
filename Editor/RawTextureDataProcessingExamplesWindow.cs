@@ -118,7 +118,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
-			new EdgeDetectRGB24Job( tex.GetRawTextureData<RGB24>() )
+			new EdgeDetectRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
 				.Run( rawdata.Length );
 		}
 		else
