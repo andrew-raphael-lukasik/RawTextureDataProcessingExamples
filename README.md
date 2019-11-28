@@ -10,4 +10,4 @@ Tester window available under MenuItem "Test/Raw Texture Data/Processing Example
 
 ![Tester window](https://i.imgur.com/B8LlAQu.jpg)
 
-NOTE: You can process NativeArray in some different type of job or even completely outside any. It's simply fastest this way.
+NOTE: You can process NativeArray in some different type of IJob or even completely outside any. It's simply fastest this way.
