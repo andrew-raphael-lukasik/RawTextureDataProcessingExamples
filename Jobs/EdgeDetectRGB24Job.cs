@@ -17,9 +17,9 @@ public struct EdgeDetectRGB24Job : Unity.Jobs.IJobParallelFor
 	}
 	void Unity.Jobs.IJobParallelFor.Execute ( int i )
 	{
-		var px = results[i];
-		var pr = results[ math.min( i+1 , Last ) ];
-		var pb = results[ math.min( i+Width , Last ) ];
+		var px = copy[i];
+		var pr = copy[ math.min( i+1 , Last ) ];
+		var pb = copy[ math.min( i+Width , Last ) ];
 
 		byte f = (byte)math.max( math.abs((px.R+px.G+px.B)-(pr.R+pr.G+pr.B)) , math.abs((px.R+px.G+px.B)-(pb.R+pb.G+pb.B)) );
 		

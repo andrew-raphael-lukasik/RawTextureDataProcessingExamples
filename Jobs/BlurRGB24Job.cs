@@ -19,11 +19,11 @@ public struct BlurRGB24Job : Unity.Jobs.IJobParallelFor
 	{
 		const int kernelSize = 5;
 
-		var px = results[i];//center
-		var pxr = results[ math.min( i+1 , Last ) ];//right neighbour
-		var pxl = results[ math.clamp( i-1 , 0 , Last ) ];//left neighbour
-		var pxt = results[ math.clamp( i-Width , 0 , Last ) ];//top neighbour
-		var pxb = results[ math.min( i+Width , Last ) ];//bottom neighbour
+		var px = copy[i];//center
+		var pxr = copy[ math.min( i+1 , Last ) ];//right neighbour
+		var pxl = copy[ math.clamp( i-1 , 0 , Last ) ];//left neighbour
+		var pxt = copy[ math.clamp( i-Width , 0 , Last ) ];//top neighbour
+		var pxb = copy[ math.min( i+Width , Last ) ];//bottom neighbour
 
 		byte R = (byte)( ( px.R + pxr.R + pxl.R + pxt.R + pxb.R ) / kernelSize );
 		byte G = (byte)( ( px.G + pxr.G + pxl.G + pxt.G + pxb.G ) / kernelSize );
