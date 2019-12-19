@@ -85,71 +85,110 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 
 	static void InvertColors ( Texture2D tex )
 	{
+		#if DEBUG
+		var timeStart = System.DateTime.Now;
+		#endif
+		
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
 			new InvertRGB24Job { data = tex.GetRawTextureData<RGB24>() }
-				.Run( rawdata.Length );
+				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
 		else if( tex.format==TextureFormat.RGBA32 )
 		{
 			var rawdata = tex.GetRawTextureData<RGBA32>();
 			new InvertRGBA32Job { data = tex.GetRawTextureData<RGBA32>() }
-				.Run( rawdata.Length );
+				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
 		else if( tex.format==TextureFormat.R8 || tex.format==TextureFormat.Alpha8 )
 		{
 			var rawdata = tex.GetRawTextureData<byte>();
 			new InvertByteJob { data = tex.GetRawTextureData<byte>() }
-				.Run( rawdata.Length );
+				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
 		else if( tex.format==TextureFormat.R16 )
 		{
 			var rawdata = tex.GetRawTextureData<ushort>();
 			new InvertR16Job { data = tex.GetRawTextureData<ushort>() }
-				.Run( rawdata.Length );
+				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
 		else if( tex.format==TextureFormat.RGB565 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB565>();
 			new InvertRGB565Job { data = tex.GetRawTextureData<RGB565>() }
-				.Run( rawdata.Length );
+				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
-		else
-		{
-			throw new System.NotImplementedException($"{tex.format} processing not implemented");
-		}
+		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
+
+		#if DEBUG
+		var timeJobEnd = System.DateTime.Now;
+		#endif
+
 		tex.Apply();
+		
+		#if DEBUG
+		var now = System.DateTime.Now;
+		var timeJob = timeJobEnd - timeStart;
+		var timeApply = now - timeJobEnd;
+		Debug.Log($"{nameof(InvertColors)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		#endif
 	}
 
 	static void EdgeDetect ( Texture2D tex )
 	{
+		#if DEBUG
+		var timeStart = System.DateTime.Now;
+		#endif
+
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
 			new EdgeDetectRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
-				.Run( rawdata.Length );
+				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
-		else
-		{
-			throw new System.NotImplementedException($"{tex.format} processing not implemented");
-		}
+		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
+		
+		#if DEBUG
+		var timeJobEnd = System.DateTime.Now;
+		#endif
+
 		tex.Apply();
+		
+		#if DEBUG
+		var now = System.DateTime.Now;
+		var timeJob = timeJobEnd - timeStart;
+		var timeApply = now - timeJobEnd;
+		Debug.Log($"{nameof(EdgeDetect)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		#endif
 	}
 
 	static void Blur ( Texture2D tex )
 	{
+		#if DEBUG
+		var timeStart = System.DateTime.Now;
+		#endif
+
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
 			new BlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
-				.Run( rawdata.Length );
+				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
-		else
-		{
-			throw new System.NotImplementedException($"{tex.format} processing not implemented");
-		}
+		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
+		
+		#if DEBUG
+		var timeJobEnd = System.DateTime.Now;
+		#endif
+
 		tex.Apply();
+		
+		#if DEBUG
+		var now = System.DateTime.Now;
+		var timeJob = timeJobEnd - timeStart;
+		var timeApply = now - timeJobEnd;
+		Debug.Log($"{nameof(Blur)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		#endif
 	}
 
     [UnityEditor.MenuItem("Test/Raw Texture Data/Processing Example")]
