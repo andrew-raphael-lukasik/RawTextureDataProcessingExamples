@@ -5,6 +5,7 @@ This repository contains 3 example job types:
 - Invert color
 - Edge detection
 - Blur
+- Grayscale
 
 Tester window available under MenuItem "Test/Raw Texture Data/Processing Example"
 
