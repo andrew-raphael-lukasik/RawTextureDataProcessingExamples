@@ -35,6 +35,12 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 			BUTTON_BLUR.SetEnabled( _texture!=null );
 			BUTTON_BLUR.text = "Blur";
 		}
+
+		var BUTTON_GRAYSCALE = new Button( ()=> Grayscale( _texture ) );
+		{
+			BUTTON_GRAYSCALE.SetEnabled( _texture!=null );
+			BUTTON_GRAYSCALE.text = "Grayscale";
+		}
 		
 		var FIELD = new ObjectField();
 		{
@@ -61,6 +67,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 						BUTTON_INVERT.SetEnabled( true );
 						BUTTON_EDGES.SetEnabled( true );
 						BUTTON_BLUR.SetEnabled( true );
+						BUTTON_GRAYSCALE.SetEnabled( true );
 					}
 					else
 					{
@@ -70,6 +77,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 						BUTTON_INVERT.SetEnabled( false );
 						BUTTON_EDGES.SetEnabled( false );
 						BUTTON_BLUR.SetEnabled( false );
+						BUTTON_GRAYSCALE.SetEnabled( false );
 					}
 				}
 			);
@@ -81,6 +89,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		rootVisualElement.Add( BUTTON_INVERT );
 		rootVisualElement.Add( BUTTON_EDGES );
 		rootVisualElement.Add( BUTTON_BLUR );
+		rootVisualElement.Add( BUTTON_GRAYSCALE );
     }
 
 	static void InvertColors ( Texture2D tex )
@@ -200,6 +209,40 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		var timeJob = timeJobEnd - timeStart;
 		var timeApply = now - timeJobEnd;
 		Debug.Log($"{nameof(Blur)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		#endif
+	}
+
+	static void Grayscale ( Texture2D tex )
+	{
+		#if DEBUG
+		var timeStart = System.DateTime.Now;
+		#endif
+
+		if( tex.format==TextureFormat.RGB24 )
+		{
+			var rawdata = tex.GetRawTextureData<RGB24>();
+			new GrayscaleRGB24Job { data = tex.GetRawTextureData<RGB24>() }
+				.Schedule( rawdata.Length , tex.width ).Complete();
+		}
+		else if( tex.format==TextureFormat.RGBA32 )
+		{
+			var rawdata = tex.GetRawTextureData<RGBA32>();
+			new GrayscaleRGBA32Job { data = tex.GetRawTextureData<RGBA32>() }
+				.Schedule( rawdata.Length , tex.width ).Complete();
+		}
+		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
+		
+		#if DEBUG
+		var timeJobEnd = System.DateTime.Now;
+		#endif
+
+		tex.Apply();
+		
+		#if DEBUG
+		var now = System.DateTime.Now;
+		var timeJob = timeJobEnd - timeStart;
+		var timeApply = now - timeJobEnd;
+		Debug.Log($"{nameof(Grayscale)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
 		#endif
 	}
 
