@@ -6,10 +6,10 @@ using Unity.Jobs;
 public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 {
 
-    Texture2D _texture;
-    
-    void OnEnable ()
-    {
+	Texture2D _texture;
+	
+	void OnEnable ()
+	{
 		rootVisualElement.Clear();
 
 		var PREVIEW = new Image();
@@ -90,7 +90,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		rootVisualElement.Add( BUTTON_EDGES );
 		rootVisualElement.Add( BUTTON_BLUR );
 		rootVisualElement.Add( BUTTON_GRAYSCALE );
-    }
+	}
 
 	static void InvertColors ( Texture2D tex )
 	{
@@ -246,7 +246,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		#endif
 	}
 
-    [UnityEditor.MenuItem("Test/Raw Texture Data/Processing Example")]
-    static void CreateWindow () => UnityEditor.EditorWindow.GetWindow<RawTextureDataProcessingExamplesWindow>( nameof(RawTextureDataProcessingExamplesWindow) ).Show();
+	[UnityEditor.MenuItem("Test/Raw Texture Data/Processing Example")]
+	static void CreateWindow () => UnityEditor.EditorWindow.GetWindow<RawTextureDataProcessingExamplesWindow>( nameof(RawTextureDataProcessingExamplesWindow) ).Show();
 
 }
