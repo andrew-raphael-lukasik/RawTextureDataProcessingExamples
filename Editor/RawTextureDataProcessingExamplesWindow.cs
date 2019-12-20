@@ -147,6 +147,12 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 			new EdgeDetectRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
 				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
+		else if( tex.format==TextureFormat.RGBA32 )
+		{
+			var rawdata = tex.GetRawTextureData<RGBA32>();
+			new EdgeDetectRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width )
+				.Schedule( rawdata.Length , tex.width ).Complete();
+		}
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
 		
 		#if DEBUG
@@ -173,6 +179,12 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
 			new BlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
+				.Schedule( rawdata.Length , tex.width ).Complete();
+		}
+		else if( tex.format==TextureFormat.RGBA32 )
+		{
+			var rawdata = tex.GetRawTextureData<RGBA32>();
+			new BlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width )
 				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
