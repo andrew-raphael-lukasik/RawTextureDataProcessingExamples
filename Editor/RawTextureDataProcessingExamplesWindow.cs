@@ -95,7 +95,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 	static void InvertColors ( Texture2D tex )
 	{
 		#if DEBUG
-		var timeStart = System.DateTime.Now;
+		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 		#endif
 		
 		if( tex.format==TextureFormat.RGB24 )
@@ -131,23 +131,22 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
 
 		#if DEBUG
-		var timeJobEnd = System.DateTime.Now;
+		var timeJob = stopwatch.Elapsed.TotalMilliseconds;
+		stopwatch.Restart();
 		#endif
 
 		tex.Apply();
 		
 		#if DEBUG
-		var now = System.DateTime.Now;
-		var timeJob = timeJobEnd - timeStart;
-		var timeApply = now - timeJobEnd;
-		Debug.Log($"{nameof(InvertColors)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		var timeApply = stopwatch.Elapsed.TotalMilliseconds;
+		Debug.Log($"{nameof(InvertColors)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
 		#endif
 	}
 
 	static void EdgeDetect ( Texture2D tex )
 	{
 		#if DEBUG
-		var timeStart = System.DateTime.Now;
+		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 		#endif
 
 		if( tex.format==TextureFormat.RGB24 )
@@ -165,23 +164,22 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
 		
 		#if DEBUG
-		var timeJobEnd = System.DateTime.Now;
+		var timeJob = stopwatch.Elapsed.TotalMilliseconds;
+		stopwatch.Restart();
 		#endif
 
 		tex.Apply();
 		
 		#if DEBUG
-		var now = System.DateTime.Now;
-		var timeJob = timeJobEnd - timeStart;
-		var timeApply = now - timeJobEnd;
-		Debug.Log($"{nameof(EdgeDetect)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		var timeApply = stopwatch.Elapsed.TotalMilliseconds;
+		Debug.Log($"{nameof(EdgeDetect)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
 		#endif
 	}
 
 	static void Blur ( Texture2D tex )
 	{
 		#if DEBUG
-		var timeStart = System.DateTime.Now;
+		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 		#endif
 
 		if( tex.format==TextureFormat.RGB24 )
@@ -199,23 +197,22 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
 		
 		#if DEBUG
-		var timeJobEnd = System.DateTime.Now;
+		var timeJob = stopwatch.Elapsed.TotalMilliseconds;
+		stopwatch.Restart();
 		#endif
 
 		tex.Apply();
 		
 		#if DEBUG
-		var now = System.DateTime.Now;
-		var timeJob = timeJobEnd - timeStart;
-		var timeApply = now - timeJobEnd;
-		Debug.Log($"{nameof(Blur)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		var timeApply = stopwatch.Elapsed.TotalMilliseconds;
+		Debug.Log($"{nameof(Blur)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
 		#endif
 	}
 
 	static void Grayscale ( Texture2D tex )
 	{
 		#if DEBUG
-		var timeStart = System.DateTime.Now;
+		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 		#endif
 
 		if( tex.format==TextureFormat.RGB24 )
@@ -233,16 +230,15 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
 		
 		#if DEBUG
-		var timeJobEnd = System.DateTime.Now;
+		var timeJob = stopwatch.Elapsed.TotalMilliseconds;
+		stopwatch.Restart();
 		#endif
 
 		tex.Apply();
 		
 		#if DEBUG
-		var now = System.DateTime.Now;
-		var timeJob = timeJobEnd - timeStart;
-		var timeApply = now - timeJobEnd;
-		Debug.Log($"{nameof(Grayscale)} took: {timeJob.TotalMilliseconds:0.00}ms + {timeApply.TotalMilliseconds:0.00}ms (job execution + tex.Apply)");
+		var timeApply = stopwatch.Elapsed.TotalMilliseconds;
+		Debug.Log($"{nameof(Grayscale)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
 		#endif
 	}
 
