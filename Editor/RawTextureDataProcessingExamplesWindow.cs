@@ -30,10 +30,10 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 			BUTTON_EDGES.text = "Edge Detect";
 		}
 
-		var BUTTON_BLUR = new Button( ()=> Blur( _texture ) );
+		var BUTTON_BLUR = new Button( ()=> BoxBlur( _texture ) );
 		{
 			BUTTON_BLUR.SetEnabled( _texture!=null );
-			BUTTON_BLUR.text = "Blur";
+			BUTTON_BLUR.text = "Box Blur";
 		}
 
 		var BUTTON_GRAYSCALE = new Button( ()=> Grayscale( _texture ) );
@@ -176,7 +176,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		#endif
 	}
 
-	static void Blur ( Texture2D tex )
+	static void BoxBlur ( Texture2D tex )
 	{
 		#if DEBUG
 		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -185,13 +185,13 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
-			new BlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
+			new BoxBlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
 				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
 		else if( tex.format==TextureFormat.RGBA32 )
 		{
 			var rawdata = tex.GetRawTextureData<RGBA32>();
-			new BlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width )
+			new BoxBlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width )
 				.Schedule( rawdata.Length , tex.width ).Complete();
 		}
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
@@ -205,7 +205,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		
 		#if DEBUG
 		var timeApply = stopwatch.Elapsed.TotalMilliseconds;
-		Debug.Log($"{nameof(Blur)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
+		Debug.Log($"{nameof(BoxBlur)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
 		#endif
 	}
 
