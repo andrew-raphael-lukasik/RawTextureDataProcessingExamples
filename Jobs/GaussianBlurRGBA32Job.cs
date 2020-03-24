@@ -28,12 +28,12 @@ public struct GaussianBlurRGBA32Job : Unity.Jobs.IJob
 		BoxBlur( copy , results , (int)( (boxes[2]-1f)/2f ) );
 	}
 	
-	void BoxBlur ( NativeArray<RGBA32> input , NativeArray<RGBA32> output , int r )
+	void BoxBlur ( NativeArray<RGBA32> src , NativeArray<RGBA32> dst , int r )
 	{
-		BoxBlurH( output , input , r );
-		BoxBlurT( input , output , r );
+		BoxBlurHorizontal( dst , src , r );
+		BoxBlurTotal( src , dst , r );
 	}
-	void BoxBlurH ( NativeArray<RGBA32> input , NativeArray<RGBA32> output , int r )
+	void BoxBlurHorizontal ( NativeArray<RGBA32> src , NativeArray<RGBA32> dst , int r )
 	{
 		float iarr = 1f / (float)(r+r+1);
 		for( int i=0 ; i<h ; i++ )
@@ -41,29 +41,29 @@ public struct GaussianBlurRGBA32Job : Unity.Jobs.IJob
 			int ti = i*w;
 			int li = ti;
 			int ri = ti+r;
-			float4 fv = (int4) input[ti];
-			float4 lv = (int4) input[ti+w-1];
+			float4 fv = (int4) src[ti];
+			float4 lv = (int4) src[ti+w-1];
 			float4 val = (r+1)*fv;
 			for( var j=0 ; j<r ; j++ )
-				val += (int4) input[ti+j];
+				val += (int4) src[ti+j];
 			for( var j=0  ; j<=r ; j++ )
 			{
-				val += (int4) input[ri++] - fv;
-				output[ti++] = (RGBA32)(int4) math.round(val*iarr);
+				val += (int4) src[ri++] - fv;
+				dst[ti++] = (RGBA32)(int4) math.round(val*iarr);
 			}
 			for( var j=r+1 ; j<w-r ; j++ )
 			{
-				val += (int4) input[ri++] - (int4) input[li++];
-				output[ti++] = (RGBA32)(int4) math.round(val*iarr);
+				val += (int4) src[ri++] - (int4) src[li++];
+				dst[ti++] = (RGBA32)(int4) math.round(val*iarr);
 			}
 			for( var j=w-r ; j<w ; j++ )
 			{
-				val += lv - (int4) input[li++];
-				output[ti++] = (RGBA32)(int4) math.round(val*iarr);
+				val += lv - (int4) src[li++];
+				dst[ti++] = (RGBA32)(int4) math.round(val*iarr);
 			}
 		}
 	}
-	void BoxBlurT ( NativeArray<RGBA32> input , NativeArray<RGBA32> output , int r )
+	void BoxBlurTotal ( NativeArray<RGBA32> src , NativeArray<RGBA32> dst , int r )
 	{
 		float4 iarr = 1f / (float)(r+r+1);
 		for( int i=0 ; i<w ; i++ )
@@ -71,36 +71,35 @@ public struct GaussianBlurRGBA32Job : Unity.Jobs.IJob
 			int ti = i;
 			int li = ti;
 			int ri = ti+r*w;
-			float4 fv = (int4) input[ti];
-			float4 lv = (int4) input[ti+w*(h-1)];
+			float4 fv = (int4) src[ti];
+			float4 lv = (int4) src[ti+w*(h-1)];
 			float4 val = (r+1)*fv;
 			for( var j=0; j<r; j++)
-				val += (int4) input[ti+j*w];
+				val += (int4) src[ti+j*w];
 			for( var j=0  ; j<=r ; j++ )
 			{
-				val += (int4) input[ri] - fv;
-				output[ti] = (RGBA32)(int4) math.round(val*iarr);
+				val += (int4) src[ri] - fv;
+				dst[ti] = (RGBA32)(int4) math.round(val*iarr);
 				ri += w;
 				ti += w;
 			}
 			for( var j=r+1; j<h-r; j++ )
 			{
-				val += (int4) input[ri] - (int4) input[li];
-				output[ti] = (RGBA32)(int4) math.round(val*iarr);
+				val += (int4) src[ri] - (int4) src[li];
+				dst[ti] = (RGBA32)(int4) math.round(val*iarr);
 				li += w;
 				ri += w;
 				ti += w;
 			}
 			for( var j=h-r; j<h ; j++ )
 			{
-				val += lv - (int4) input[li];
-				output[ti] = (RGBA32)(int4) math.round(val*iarr);
+				val += lv - (int4) src[li];
+				dst[ti] = (RGBA32)(int4) math.round(val*iarr);
 				li += w;
 				ti += w;
 			}
 		}
 	}
-
 	void BoxesForGauss ( float sigma , NativeArray<float> boxes )
 	{
 		int n = boxes.Length;
