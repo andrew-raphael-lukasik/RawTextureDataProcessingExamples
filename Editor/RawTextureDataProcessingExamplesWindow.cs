@@ -16,36 +16,63 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		{
 			PREVIEW.image = _texture;
 			PREVIEW.scaleMode = ScaleMode.ScaleAndCrop;
+			PREVIEW.style.flexGrow = 1f;
 		}
 
+		var INVERT = new VisualElement();
+		SetupStyle( INVERT );
 		var BUTTON_INVERT = new Button( ()=> InvertColors( _texture ) );
 		{
 			BUTTON_INVERT.SetEnabled( _texture!=null );
 			BUTTON_INVERT.text = "Invert Colors";
 		}
+		INVERT.Add( BUTTON_INVERT );
 
+		var EDGES = new VisualElement();
+		SetupStyle( EDGES );
 		var BUTTON_EDGES = new Button( ()=> EdgeDetect( _texture ) );
 		{
 			BUTTON_EDGES.SetEnabled( _texture!=null );
 			BUTTON_EDGES.text = "Edge Detect";
 		}
+		EDGES.Add( BUTTON_EDGES );
 
-		var BUTTON_BOX_BLUR = new Button( ()=> BoxBlur( _texture ) );
+		var BOX_BLUR = new VisualElement();
+		SetupStyle( BOX_BLUR , 46 );
+		var SLIDER_BOX_BLUR = new SliderInt( 1 , 100 );
+		{
+			SLIDER_BOX_BLUR.value = 10;
+		}
+		var BUTTON_BOX_BLUR = new Button( ()=> BoxBlur( _texture , SLIDER_BOX_BLUR.value ) );
 		{
 			BUTTON_BOX_BLUR.SetEnabled( _texture!=null );
 			BUTTON_BOX_BLUR.text = "Box Blur";
 		}
-		var BUTTON_GAUSSIAN_BLUR = new Button( ()=> GaussianBlur( _texture ) );
+		BOX_BLUR.Add( BUTTON_BOX_BLUR );
+		BOX_BLUR.Add( SLIDER_BOX_BLUR );
+
+		var GAUSSIAN_BLUR = new VisualElement();
+		SetupStyle( GAUSSIAN_BLUR , 46 );
+		var SLIDER_GAUSSIAN_BLUR = new SliderInt( 1 , 100 );
+		{
+			SLIDER_GAUSSIAN_BLUR.value = 10;
+		}
+		var BUTTON_GAUSSIAN_BLUR = new Button( ()=> GaussianBlur( _texture , SLIDER_GAUSSIAN_BLUR.value ) );
 		{
 			BUTTON_GAUSSIAN_BLUR.SetEnabled( _texture!=null );
 			BUTTON_GAUSSIAN_BLUR.text = "Gaussian Blur";
 		}
-
+		GAUSSIAN_BLUR.Add( BUTTON_GAUSSIAN_BLUR );
+		GAUSSIAN_BLUR.Add( SLIDER_GAUSSIAN_BLUR );
+		
+		var GRAYSCALE = new VisualElement();
+		SetupStyle( GRAYSCALE );
 		var BUTTON_GRAYSCALE = new Button( ()=> Grayscale( _texture ) );
 		{
 			BUTTON_GRAYSCALE.SetEnabled( _texture!=null );
 			BUTTON_GRAYSCALE.text = "Grayscale";
 		}
+		GRAYSCALE.Add( BUTTON_GRAYSCALE );
 		
 		var FIELD = new ObjectField();
 		{
@@ -68,25 +95,27 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 						}
 						_texture = newTexture;
 						PREVIEW.image = newTexture;
-						bool newEnabled = true;
-						PREVIEW.SetEnabled(newEnabled);
-						BUTTON_INVERT.SetEnabled(newEnabled);
-						BUTTON_EDGES.SetEnabled(newEnabled);
-						BUTTON_BOX_BLUR.SetEnabled(newEnabled);
-						BUTTON_GAUSSIAN_BLUR.SetEnabled(newEnabled);
-						BUTTON_GRAYSCALE.SetEnabled(newEnabled);
+						
+						bool b = true;
+						PREVIEW.SetEnabled(b);
+						BUTTON_INVERT.SetEnabled(b);
+						BUTTON_EDGES.SetEnabled(b);
+						BUTTON_BOX_BLUR.SetEnabled(b);
+						BUTTON_GAUSSIAN_BLUR.SetEnabled(b);
+						BUTTON_GRAYSCALE.SetEnabled(b);
 					}
 					else
 					{
 						_texture = null;
 						PREVIEW.image = null;
-						bool newEnabled = false;
-						PREVIEW.SetEnabled(newEnabled);
-						BUTTON_INVERT.SetEnabled(newEnabled);
-						BUTTON_EDGES.SetEnabled(newEnabled);
-						BUTTON_BOX_BLUR.SetEnabled(newEnabled);
-						BUTTON_GAUSSIAN_BLUR.SetEnabled(newEnabled);
-						BUTTON_GRAYSCALE.SetEnabled(newEnabled);
+
+						bool b = false;
+						PREVIEW.SetEnabled(b);
+						BUTTON_INVERT.SetEnabled(b);
+						BUTTON_EDGES.SetEnabled(b);
+						BUTTON_BOX_BLUR.SetEnabled(b);
+						BUTTON_GAUSSIAN_BLUR.SetEnabled(b);
+						BUTTON_GRAYSCALE.SetEnabled(b);
 					}
 				}
 			);
@@ -95,11 +124,11 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		// add elemenets to root:
 		rootVisualElement.Add( FIELD );
 		rootVisualElement.Add( PREVIEW );
-		rootVisualElement.Add( BUTTON_INVERT );
-		rootVisualElement.Add( BUTTON_EDGES );
-		rootVisualElement.Add( BUTTON_BOX_BLUR );
-		rootVisualElement.Add( BUTTON_GAUSSIAN_BLUR );
-		rootVisualElement.Add( BUTTON_GRAYSCALE );
+		rootVisualElement.Add( INVERT );
+		rootVisualElement.Add( EDGES );
+		rootVisualElement.Add( BOX_BLUR );
+		rootVisualElement.Add( GAUSSIAN_BLUR );
+		rootVisualElement.Add( GRAYSCALE );
 	}
 
 	static void InvertColors ( Texture2D tex )
@@ -186,7 +215,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		#endif
 	}
 
-	static void BoxBlur ( Texture2D tex )
+	static void BoxBlur ( Texture2D tex , int radius )
 	{
 		#if DEBUG
 		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -195,13 +224,13 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
-			new BoxBlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width , tex.height , 10 )
+			new BoxBlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width , tex.height , radius )
 				.Schedule().Complete();
 		}
 		else if( tex.format==TextureFormat.RGBA32 )
 		{
 			var rawdata = tex.GetRawTextureData<RGBA32>();
-			new BoxBlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width , tex.height , 10 )
+			new BoxBlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width , tex.height , radius )
 				.Schedule().Complete();
 		}
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
@@ -219,7 +248,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		#endif
 	}
 
-	static void GaussianBlur ( Texture2D tex )
+	static void GaussianBlur ( Texture2D tex , int radius )
 	{
 		#if DEBUG
 		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -228,13 +257,13 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
-			new GaussianBlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width , tex.height , 10 )
+			new GaussianBlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width , tex.height , radius )
 				.Schedule().Complete();
 		}
 		else if( tex.format==TextureFormat.RGBA32 )
 		{
 			var rawdata = tex.GetRawTextureData<RGBA32>();
-			new GaussianBlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width , tex.height , 10 )
+			new GaussianBlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width , tex.height , radius )
 				.Schedule().Complete();
 		}
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
@@ -287,5 +316,15 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 
 	[UnityEditor.MenuItem("Test/Raw Texture Data/Processing Example")]
 	static void CreateWindow () => UnityEditor.EditorWindow.GetWindow<RawTextureDataProcessingExamplesWindow>( nameof(RawTextureDataProcessingExamplesWindow) ).Show();
+	
+	void SetupStyle ( VisualElement ve , int minHeight = 28 )
+	{
+		var style = ve.style;
+		style.borderTopWidth = style.borderLeftWidth = style.borderRightWidth = style.borderBottomWidth = 1;
+		style.borderTopColor = style.borderLeftColor = style.borderRightColor = style.borderBottomColor = new Color{ a=0.5f };
+		style.paddingTop = style.paddingBottom = 4;
+		style.paddingLeft = style.paddingRight = 8;
 
+		style.minHeight = minHeight;
+	}
 }
