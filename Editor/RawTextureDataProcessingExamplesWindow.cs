@@ -195,14 +195,14 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		if( tex.format==TextureFormat.RGB24 )
 		{
 			var rawdata = tex.GetRawTextureData<RGB24>();
-			new BoxBlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width )
-				.Schedule( rawdata.Length , tex.width ).Complete();
+			new BoxBlurRGB24Job( tex.GetRawTextureData<RGB24>() , tex.width , tex.height , 10 )
+				.Schedule().Complete();
 		}
 		else if( tex.format==TextureFormat.RGBA32 )
 		{
 			var rawdata = tex.GetRawTextureData<RGBA32>();
-			new BoxBlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width )
-				.Schedule( rawdata.Length , tex.width ).Complete();
+			new BoxBlurRGBA32Job( tex.GetRawTextureData<RGBA32>() , tex.width , tex.height , 10 )
+				.Schedule().Complete();
 		}
 		else throw new System.NotImplementedException($"{tex.format} processing not implemented");
 		

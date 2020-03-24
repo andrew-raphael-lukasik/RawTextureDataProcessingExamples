@@ -1,48 +1,92 @@
 using Unity.Mathematics;
 using Unity.Collections;
 
+// src: http://blog.ivank.net/fastest-gaussian-blur.html
+
 [Unity.Burst.BurstCompile]
-public struct BoxBlurRGB24Job : Unity.Jobs.IJobParallelFor
+public struct BoxBlurRGB24Job : Unity.Jobs.IJob
 {
-	[DeallocateOnJobCompletion][NativeDisableParallelForRestriction] NativeArray<RGB24> copy;
-	readonly int Last;
-	readonly int Width;
+	[DeallocateOnJobCompletion] NativeArray<RGB24> copy;
+	readonly int w, h, r;
 	NativeArray<RGB24> results;
-	public BoxBlurRGB24Job ( NativeArray<RGB24> data , int texture_width )
+	public BoxBlurRGB24Job ( NativeArray<RGB24> data , int texture_width , int texture_height , int radius )
 	{
-		results = data;
-		copy = new NativeArray<RGB24>( data , Allocator.TempJob );
-		Last = results.Length-1;
-		Width = texture_width;
+		this.results = data;
+		this.copy = new NativeArray<RGB24>( data , Allocator.TempJob );
+		this.w = texture_width;
+		this.h = texture_height;
+		this.r = radius;
 	}
-	void Unity.Jobs.IJobParallelFor.Execute ( int i )
+	void Unity.Jobs.IJob.Execute ()
 	{
-		int3 upperRow;
+		BoxBlurHorizontal( results , copy );
+		BoxBlurTotal( copy , results );
+	}
+	void BoxBlurHorizontal ( NativeArray<RGB24> src , NativeArray<RGB24> dst )
+	{
+		float iarr = 1f / (float)(r+r+1);
+		for( int i=0 ; i<h ; i++ )
 		{
-			int3 c0 = (int3) copy[ math.clamp( i-Width-1 ,0,Last) ];
-			int3 c1 = (int3) copy[ math.clamp( i-Width ,0,Last) ];
-			int3 c2 = (int3) copy[ math.clamp( i-Width+1 ,0,Last) ];
-			upperRow = c0 + c1 + c2;
+			int ti = i*w;
+			int li = ti;
+			int ri = ti+r;
+			float3 fv = (int3) src[ti];
+			float3 lv = (int3) src[ti+w-1];
+			float3 val = (r+1)*fv;
+			for( var j=0 ; j<r ; j++ )
+				val += (int3) src[ti+j];
+			for( var j=0  ; j<=r ; j++ )
+			{
+				val += (int3) src[ri++] - fv;
+				dst[ti++] = (RGB24)(int3) math.round(val*iarr);
+			}
+			for( var j=r+1 ; j<w-r ; j++ )
+			{
+				val += (int3) src[ri++] - (int3) src[li++];
+				dst[ti++] = (RGB24)(int3) math.round(val*iarr);
+			}
+			for( var j=w-r ; j<w ; j++ )
+			{
+				val += lv - (int3) src[li++];
+				dst[ti++] = (RGB24)(int3) math.round(val*iarr);
+			}
 		}
-		int3 middleRow;
+	}
+	void BoxBlurTotal ( NativeArray<RGB24> src , NativeArray<RGB24> dst )
+	{
+		float3 iarr = 1f / (float)(r+r+1);
+		for( int i=0 ; i<w ; i++ )
 		{
-			int3 c0 = (int3) copy[ math.clamp( i-1 ,0,Last) ];
-			int3 c1 = (int3) copy[ math.clamp( i ,0,Last) ];
-			int3 c2 = (int3) copy[ math.clamp( i+1 ,0,Last) ];
-			middleRow = c0 + c1 + c2;
+			int ti = i;
+			int li = ti;
+			int ri = ti+r*w;
+			float3 fv = (int3) src[ti];
+			float3 lv = (int3) src[ti+w*(h-1)];
+			float3 val = (r+1)*fv;
+			for( var j=0; j<r; j++)
+				val += (int3) src[ti+j*w];
+			for( var j=0  ; j<=r ; j++ )
+			{
+				val += (int3) src[ri] - fv;
+				dst[ti] = (RGB24)(int3) math.round(val*iarr);
+				ri += w;
+				ti += w;
+			}
+			for( var j=r+1; j<h-r; j++ )
+			{
+				val += (int3) src[ri] - (int3) src[li];
+				dst[ti] = (RGB24)(int3) math.round(val*iarr);
+				li += w;
+				ri += w;
+				ti += w;
+			}
+			for( var j=h-r; j<h ; j++ )
+			{
+				val += lv - (int3) src[li];
+				dst[ti] = (RGB24)(int3) math.round(val*iarr);
+				li += w;
+				ti += w;
+			}
 		}
-		int3 bottomRow;
-		{
-			int3 c0 = (int3) copy[ math.clamp( i+Width-1 ,0,Last) ];
-			int3 c1 = (int3) copy[ math.clamp( i+Width ,0,Last) ];
-			int3 c2 = (int3) copy[ math.clamp( i+Width+1 ,0,Last) ];
-			bottomRow = c0 + c1 + c2;
-		}
-		int3 result = ( upperRow + middleRow + bottomRow ) / 9;
-		results[i] = new RGB24{
-			R = (byte) result.x ,
-			G = (byte) result.y ,
-			B = (byte) result.z
-		};
 	}
 }
