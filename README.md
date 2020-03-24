@@ -4,7 +4,8 @@ Documentation gives little helpful information on this topic so I created this r
 This repository contains 3 example job types:
 - Invert color
 - Edge detection
-- Blur
+- Box Blur
+- Gaussian Blur
 - Grayscale
 
 Tester window available under MenuItem "Test/Raw Texture Data/Processing Example"
