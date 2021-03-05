@@ -17,15 +17,15 @@ Tester window available under MenuItem "Test/Raw Texture Data/Processing Example
 
 Valid `<T>` for `GetRawTextureData<T>` depending on `texture.format` property:
 
-- TextureFormat.Alpha8 - `<byte>`
-- TextureFormat.R8 - `<byte>`
-- TextureFormat.R16 - `<ushort>`,`<byte2>
-- TextureFormat.RHalf - `<half>`,`<byte2>`
-- TextureFormat.RFloat - `<float>`,`<byte4>`
-- TextureFormat.RGB24 - `<byte3>`
-- TextureFormat.RGBA32 - `<Color32>`,`<byte4>`
-- TextureFormat.RGBAHalf - `<half4>`,`<byte2x4>`
-- TextureFormat.RGBAFloat - `<Color>`,`<Vector4>`,`<float4>`,`<byte4x4>`
+- `TextureFormat.Alpha8` - `<byte>`
+- `TextureFormat.R8` - `<byte>`
+- `TextureFormat.R16` - `<ushort>`,`<byte2>
+- `TextureFormat.RHalf` - `<half>`,`<byte2>`
+- `TextureFormat.RFloat` - `<float>`,`<byte4>`
+- `TextureFormat.RGB24` - `<byte3>`
+- `TextureFormat.RGBA32` - `<Color32>`,`<byte4>`
+- `TextureFormat.RGBAHalf` - `<half4>`,`<byte2x4>`
+- `TextureFormat.RGBAFloat` - `<Color>`,`<Vector4>`,`<float4>`,`<byte4x4>`
 
 Bestiary:
 - `public struct byte2 { public byte x, y; }`
