@@ -19,7 +19,7 @@ Valid `<T>` for `GetRawTextureData<T>` depending on `texture.format` property:
 
 - `TextureFormat.Alpha8` - `<byte>`
 - `TextureFormat.R8` - `<byte>`
-- `TextureFormat.R16` - `<ushort>`,`<byte2>
+- `TextureFormat.R16` - `<ushort>`,`<byte2>`
 - `TextureFormat.RHalf` - `<half>`,`<byte2>`
 - `TextureFormat.RFloat` - `<float>`,`<byte4>`
 - `TextureFormat.RGB24` - `<byte3>`
