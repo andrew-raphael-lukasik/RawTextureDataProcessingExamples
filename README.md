@@ -12,14 +12,20 @@ Tester window available under MenuItem "Test/Raw Texture Data/Processing Example
 
 ![Tester window](https://i.imgur.com/I0RTpk9.jpg)
 
+Note `GetRawTextureData<T>` will return all the raw texture data including data from the mipmaps should they be enabled. In such case the length of the array will be longer than `width * height`.
+`GetPixelData<T>` does not suffer from this issue as you can pass in the desired mip level (usually 0).
+
 ---
 # Quick lookup table
 
-Valid `<T>` for `GetRawTextureData<T>` depending on `texture.format` property:
+Valid `<T>` for `GetRawTextureData<T>` & `GetPixelData<T>` or  depending on `texture.format` property:
 
 - `TextureFormat.Alpha8` - `<byte>`
 - `TextureFormat.R8` - `<byte>`
 - `TextureFormat.R16` - `<ushort>`,`<byte2>`
+- `TextureFormat.RG32` - `<ushort2>`
+- `TextureFormat.RGB48` - `<ushort3>`
+- `TextureFormat.RGBA64` - `<ushort4>`
 - `TextureFormat.RHalf` - `<half>`,`<byte2>`
 - `TextureFormat.RFloat` - `<float>`,`<byte4>`
 - `TextureFormat.RGB24` - `<byte3>`
@@ -33,3 +39,6 @@ Bestiary:
 - `public struct byte4 { public byte x, y, z, w; }`
 - `public struct byte2x4 { public byte2 c0, c1, c2, c3; }`
 - `public struct byte4x4 { public byte4 c0, c1, c2, c3; }`
+- `public struct ushort2 { public ushort x, y; }`
+- `public struct ushort3 { public ushort x, y, z; }`
+- `public struct ushort4 { public ushort x, y, z, w; }`
