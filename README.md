@@ -23,6 +23,9 @@ Valid `<T>` for `GetRawTextureData<T>` & `GetPixelData<T>` or  depending on `tex
 - `TextureFormat.Alpha8` - `<byte>`
 - `TextureFormat.R8` - `<byte>`
 - `TextureFormat.R16` - `<ushort>`,`<byte2>`
+- `TextureFormat.RG32` - `<ushort2>`
+- `TextureFormat.RGB48` - `<ushort3>`
+- `TextureFormat.RGBA64` - `<ushort4>`
 - `TextureFormat.RHalf` - `<half>`,`<byte2>`
 - `TextureFormat.RFloat` - `<float>`,`<byte4>`
 - `TextureFormat.RGB24` - `<byte3>`
@@ -36,3 +39,6 @@ Bestiary:
 - `public struct byte4 { public byte x, y, z, w; }`
 - `public struct byte2x4 { public byte2 c0, c1, c2, c3; }`
 - `public struct byte4x4 { public byte4 c0, c1, c2, c3; }`
+- `public struct ushort2 { public ushort x, y; }`
+- `public struct ushort3 { public ushort x, y, z; }`
+- `public struct ushort4 { public ushort x, y, z, w; }`
