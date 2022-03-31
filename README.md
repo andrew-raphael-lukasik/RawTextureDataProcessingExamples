@@ -12,10 +12,13 @@ Tester window available under MenuItem "Test/Raw Texture Data/Processing Example
 
 ![Tester window](https://i.imgur.com/I0RTpk9.jpg)
 
+Note `GetRawTextureData<T>` will return all the raw texture data including data from the mipmaps should they be enabled. In such case the length of the array will be longer than `width * height`.
+`GetPixelData<T>` does not suffer from this issue as you can pass in the desired mip level (usually 0).
+
 ---
 # Quick lookup table
 
-Valid `<T>` for `GetRawTextureData<T>` depending on `texture.format` property:
+Valid `<T>` for `GetRawTextureData<T>` & `GetPixelData<T>` or  depending on `texture.format` property:
 
 - `TextureFormat.Alpha8` - `<byte>`
 - `TextureFormat.R8` - `<byte>`
