@@ -15,8 +15,10 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 		var PREVIEW = new Image();
 		{
 			PREVIEW.image = _texture;
-			PREVIEW.scaleMode = ScaleMode.ScaleAndCrop;
-			PREVIEW.style.flexGrow = 1f;
+            PREVIEW.scaleMode = ScaleMode.ScaleToFit;
+            PREVIEW.style.flexGrow = 1f;
+            PREVIEW.style.marginBottom = 8;
+            PREVIEW.style.marginTop = 8;
 		}
 
 		var INVERT = new VisualElement();
@@ -121,7 +123,7 @@ public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
 			);
 		}
 
-		// add elemenets to root:
+		// add elements to root:
 		rootVisualElement.Add( FIELD );
 		rootVisualElement.Add( PREVIEW );
 		rootVisualElement.Add( INVERT );
