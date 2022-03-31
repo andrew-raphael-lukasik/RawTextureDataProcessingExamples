@@ -3,6 +3,8 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using Unity.Jobs;
 
+using Undo = UnityEditor.Undo;
+
 namespace RawTextureDataProcessingExamples
 {
     public class RawTextureDataProcessingExamplesWindow : UnityEditor.EditorWindow
@@ -24,7 +26,10 @@ namespace RawTextureDataProcessingExamples
 
             var INVERT = new VisualElement();
             SetupStyle( INVERT );
-            var BUTTON_INVERT = new Button( ()=> InvertColors( _texture ) );
+            var BUTTON_INVERT = new Button( ()=> {
+                Undo.RegisterCompleteObjectUndo( _texture , nameof(InvertColors) );
+                InvertColors( _texture );
+            } );
             {
                 BUTTON_INVERT.SetEnabled( _texture!=null );
                 BUTTON_INVERT.text = "Invert Colors";
@@ -33,7 +38,10 @@ namespace RawTextureDataProcessingExamples
 
             var EDGES = new VisualElement();
             SetupStyle( EDGES );
-            var BUTTON_EDGES = new Button( ()=> EdgeDetect( _texture ) );
+            var BUTTON_EDGES = new Button( ()=> {
+                Undo.RegisterCompleteObjectUndo( _texture , nameof(EdgeDetect) );
+                EdgeDetect( _texture );
+            } );
             {
                 BUTTON_EDGES.SetEnabled( _texture!=null );
                 BUTTON_EDGES.text = "Edge Detect";
@@ -46,7 +54,10 @@ namespace RawTextureDataProcessingExamples
             {
                 SLIDER_BOX_BLUR.value = 10;
             }
-            var BUTTON_BOX_BLUR = new Button( ()=> BoxBlur( _texture , SLIDER_BOX_BLUR.value ) );
+            var BUTTON_BOX_BLUR = new Button( ()=> {
+                Undo.RegisterCompleteObjectUndo( _texture , nameof(BoxBlur) );
+                BoxBlur( _texture , SLIDER_BOX_BLUR.value );
+            } );
             {
                 BUTTON_BOX_BLUR.SetEnabled( _texture!=null );
                 BUTTON_BOX_BLUR.text = "Box Blur";
@@ -60,7 +71,10 @@ namespace RawTextureDataProcessingExamples
             {
                 SLIDER_GAUSSIAN_BLUR.value = 10;
             }
-            var BUTTON_GAUSSIAN_BLUR = new Button( ()=> GaussianBlur( _texture , SLIDER_GAUSSIAN_BLUR.value ) );
+            var BUTTON_GAUSSIAN_BLUR = new Button( ()=> {
+                Undo.RegisterCompleteObjectUndo( _texture , nameof(GaussianBlur) );
+                GaussianBlur( _texture , SLIDER_GAUSSIAN_BLUR.value );
+            } );
             {
                 BUTTON_GAUSSIAN_BLUR.SetEnabled( _texture!=null );
                 BUTTON_GAUSSIAN_BLUR.text = "Gaussian Blur";
@@ -70,7 +84,10 @@ namespace RawTextureDataProcessingExamples
 		
             var GRAYSCALE = new VisualElement();
             SetupStyle( GRAYSCALE );
-            var BUTTON_GRAYSCALE = new Button( ()=> Grayscale( _texture ) );
+            var BUTTON_GRAYSCALE = new Button( ()=> {
+                Undo.RegisterCompleteObjectUndo( _texture , nameof(Grayscale) );
+                Grayscale( _texture );
+            } );
             {
                 BUTTON_GRAYSCALE.SetEnabled( _texture!=null );
                 BUTTON_GRAYSCALE.text = "Grayscale";
