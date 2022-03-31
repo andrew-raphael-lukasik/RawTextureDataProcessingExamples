@@ -153,9 +153,7 @@ namespace RawTextureDataProcessingExamples
 
         static void InvertColors ( Texture2D tex )
         {
-#if DEBUG
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-#endif
 		
             switch (tex.format)
             {
@@ -220,24 +218,18 @@ namespace RawTextureDataProcessingExamples
                     throw new System.NotImplementedException($"{tex.format} processing not implemented");
             }
 
-#if DEBUG
             var timeJob = stopwatch.Elapsed.TotalMilliseconds;
             stopwatch.Restart();
-#endif
 
             tex.Apply();
 		
-#if DEBUG
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
             Debug.Log($"{nameof(InvertColors)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
-#endif
         }
 
         static void EdgeDetect ( Texture2D tex )
         {
-#if DEBUG
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-#endif
 
             switch (tex.format)
             {
@@ -287,24 +279,18 @@ namespace RawTextureDataProcessingExamples
                     throw new System.NotImplementedException($"{tex.format} processing not implemented");
             }
 		
-#if DEBUG
             var timeJob = stopwatch.Elapsed.TotalMilliseconds;
             stopwatch.Restart();
-#endif
 
             tex.Apply();
 		
-#if DEBUG
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
             Debug.Log($"{nameof(EdgeDetect)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
-#endif
         }
 
         static void BoxBlur ( Texture2D tex , int radius )
         {
-#if DEBUG
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-#endif
 
             switch (tex.format)
             {
@@ -354,24 +340,18 @@ namespace RawTextureDataProcessingExamples
                     throw new System.NotImplementedException($"{tex.format} processing not implemented");
             }
 
-#if DEBUG
             var timeJob = stopwatch.Elapsed.TotalMilliseconds;
             stopwatch.Restart();
-#endif
 
             tex.Apply();
 		
-#if DEBUG
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
             Debug.Log($"{nameof(BoxBlur)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
-#endif
         }
 
         static void GaussianBlur ( Texture2D tex , int radius )
         {
-#if DEBUG
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-#endif
 
             switch (tex.format)
             {
@@ -421,24 +401,18 @@ namespace RawTextureDataProcessingExamples
                     throw new System.NotImplementedException($"{tex.format} processing not implemented");
             }
 
-#if DEBUG
             var timeJob = stopwatch.Elapsed.TotalMilliseconds;
             stopwatch.Restart();
-#endif
 
             tex.Apply();
 		
-#if DEBUG
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
             Debug.Log($"{nameof(GaussianBlur)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
-#endif
         }
 
         static void Grayscale ( Texture2D tex )
         {
-#if DEBUG
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-#endif
 
             switch (tex.format)
             {
@@ -474,17 +448,13 @@ namespace RawTextureDataProcessingExamples
                     throw new System.NotImplementedException($"{tex.format} processing not implemented");
             }
 
-#if DEBUG
             var timeJob = stopwatch.Elapsed.TotalMilliseconds;
             stopwatch.Restart();
-#endif
 
             tex.Apply();
 		
-#if DEBUG
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
             Debug.Log($"{nameof(Grayscale)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
-#endif
         }
 
         [UnityEditor.MenuItem("Test/Raw Texture Data/Processing Example")]
