@@ -224,7 +224,7 @@ namespace RawTextureDataProcessingExamples
             tex.Apply();
 		
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
-            Debug.Log($"{nameof(InvertColors)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
+            Debug.Log($"{nameof(InvertColors)} took:\t<b>{timeJob:0.00} [ms]</b>\t\tupload to GPU:\t<b>{timeApply:0.00} [ms]</b>");
         }
 
         static void EdgeDetect ( Texture2D tex )
@@ -285,7 +285,7 @@ namespace RawTextureDataProcessingExamples
             tex.Apply();
 		
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
-            Debug.Log($"{nameof(EdgeDetect)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
+            Debug.Log($"{nameof(EdgeDetect)} took:\t<b>{timeJob:0.00} [ms]</b>\t\tupload to GPU:\t<b>{timeApply:0.00} [ms]</b>");
         }
 
         static void BoxBlur ( Texture2D tex , int radius )
@@ -346,7 +346,7 @@ namespace RawTextureDataProcessingExamples
             tex.Apply();
 		
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
-            Debug.Log($"{nameof(BoxBlur)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
+            Debug.Log($"{nameof(BoxBlur)} took:\t\t<b>{timeJob:0.00} [ms]</b>\t\tupload to GPU:\t<b>{timeApply:0.00} [ms]</b>");
         }
 
         static void GaussianBlur ( Texture2D tex , int radius )
@@ -407,7 +407,7 @@ namespace RawTextureDataProcessingExamples
             tex.Apply();
 		
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
-            Debug.Log($"{nameof(GaussianBlur)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
+            Debug.Log($"{nameof(GaussianBlur)} took:\t<b>{timeJob:0.00} [ms]</b>\t\tupload to GPU:\t<b>{timeApply:0.00} [ms]</b>");
         }
 
         static void Grayscale ( Texture2D tex )
@@ -454,7 +454,7 @@ namespace RawTextureDataProcessingExamples
             tex.Apply();
 		
             var timeApply = stopwatch.Elapsed.TotalMilliseconds;
-            Debug.Log($"{nameof(Grayscale)} took: {timeJob:0.00}ms + {timeApply:0.00}ms (job execution + tex.Apply)");
+            Debug.Log($"{nameof(Grayscale)} took:\t\t<b>{timeJob:0.00} [ms]</b>\t\tupload to GPU:\t<b>{timeApply:0.00} [ms]</b>");
         }
 
         [UnityEditor.MenuItem("Test/Raw Texture Data/Processing Example")]
