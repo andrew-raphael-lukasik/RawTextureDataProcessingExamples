@@ -124,7 +124,7 @@ namespace RawTextureDataProcessingExamples
                 );
             }
 
-            // add elemenets to root:
+            // add elements to root:
             rootVisualElement.Add( FIELD );
             rootVisualElement.Add( PREVIEW );
             rootVisualElement.Add( INVERT );
